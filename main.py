@@ -10,10 +10,16 @@ from langdetect import detect
 # Objetivo: Suportar PDF, DOCX e TXT
 # =========================================================
 def extrair_texto(ficheiro):
-    # TODO: Implementar lógica para identificar extensão
-    # TODO: Extrair texto preservando quebras originais
-    # TODO: Capturar artefactos e erros de encoding
-    return "Texto bruto extraído aqui"
+    nome = ficheiro.name.lower()
+    if nome.endswith(".txt"):
+        return ficheiro.read().decode("utf-8")
+    elif nome.endswith(".docx"):
+        doc = docx.Document(ficheiro)
+        return "\n".join([p.text for p in doc.paragraphs])
+    elif nome.endswith(".pdf"):
+        leitor = PyPDF2.PdfReader(ficheiro)
+        return "\n".join([pagina.extract_text() for pagina in leitor.pages])
+    return ""
 
 # =========================================================
 # TAREFA 2: Pipeline de Limpeza (Adriano Sousa)
@@ -40,17 +46,36 @@ def preparar_input(texto_limpo):
 # Objetivo: Visualização Antes/Depois e Upload
 # =========================================================
 def main():
-    st.title("Normalização de Texto - Etapa 1")
-    
-    # 1. Widget de Upload
-    
-    # 2. Sidebar com Opções da Pipeline
-    
-    # 3. Mostrar Texto Bruto (Antes)
-    
-    # 4. Mostrar Texto Limpo (Depois)
-    
-    # 5. Mostrar Preparação para SLM
+    st.set_page_config(layout="wide")
+    st.header("Pipeline de Pré-Processamento")
 
-if __name__ == "__main__":
-    main()
+    # Upload [cite: 11]
+    f = st.file_uploader("Carregar PDF, DOCX ou TXT", type=['pdf', 'docx', 'txt'])
+
+    if f:
+        bruto = extrair_texto(f)
+        
+        # Interface de configuração [cite: 26]
+        st.sidebar.subheader("Configurações da Pipeline")
+        art = st.sidebar.checkbox("Remover Artefactos", value=True)
+        esp = st.sidebar.checkbox("Normalizar Espaços", value=True)
+        
+        # Colunas para visualização Antes/Depois [cite: 33]
+        col1, col2 = st.columns(2)
+        with col1:
+            st.subheader("Texto Bruto")
+            st.text_area("Original", bruto, height=300)
+            
+        limpo = pipeline_limpeza(bruto, {'remover_artefactos': art, 'normalizar_espacos': esp})
+        
+        with col2:
+            st.subheader("Texto Limpo")
+            st.text_area("Resultado", limpo, height=300)
+            
+        # Preparação SLM [cite: 36]
+        st.divider()
+        idioma, chunks, prompt = preparar_input(limpo)
+        st.write(f"*Idioma:* {idioma} | *Chunks:* {len(chunks)}")
+        st.info(f"*Prompt Gerado:* {prompt}")
+
+main()
