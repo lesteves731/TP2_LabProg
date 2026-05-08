@@ -26,20 +26,24 @@ def extrair_texto(ficheiro):
 # Objetivo: Criar pipeline configurável
 # =========================================================
 def pipeline_limpeza(texto_bruto, opcoes):
-    # TODO: Implementar remoção de artefactos
-    # TODO: Implementar normalização de espaços e pontuação
-    # TODO: Implementar lógica para cabeçalhos/rodapés repetidos
-    return "Texto limpo aqui"
+        if config.get('remover_artefactos'):
+        texto = re.sub(r'[^\x00-\x7F]+', ' ', texto) # Remove caracteres não-ASCII
+    if config.get('normalizar_espacos'):
+        texto = re.sub(r'\s+', ' ', texto).strip() # Normaliza espaços e quebras
+    return texto
 
 # =========================================================
 # TAREFA 3: Preparação do Input (Adriano Sousa)
 # Objetivo: Segmentação e Prompting
 # =========================================================
-def preparar_input(texto_limpo):
-    # TODO: Implementar deteção de idioma
-    # TODO: Implementar chunking (segmentação)
-    # TODO: Gerar prompt automático
-    return "Idioma, Chunks e Prompt"
+def preparar_input(texto):
+    try:
+        idioma = detect(texto)
+    except:
+        idioma = "pt"
+    chunks = [texto[i:i+1000] for i in range(0, len(texto), 1000)]
+    prompt = f"Instrução: Normalize este texto em {idioma} mantendo o tom profissional."
+    return idioma, chunks, prompt
 
 # =========================================================
 # INTERFACE E INTEGRAÇÃO (Luís Esteves)

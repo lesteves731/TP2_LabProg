@@ -1,0 +1,14 @@
+Relatório    Final
+
+
+Introdução
+Este   é um texto
+com várias quebras
+de linha erradas.
+
+
+@@##%%
+Texto com símbolos estranhos.
+
+
+Fim.
