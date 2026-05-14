@@ -26,7 +26,7 @@ def extrair_texto(ficheiro):
 # Objetivo: Criar pipeline configurável
 # =========================================================
 def pipeline_limpeza(texto_bruto, opcoes):
-        if config.get('remover_artefactos'):
+    if config.get('remover_artefactos'):
         texto = re.sub(r'[^\x00-\x7F]+', ' ', texto) # Remove caracteres não-ASCII
     if config.get('normalizar_espacos'):
         texto = re.sub(r'\s+', ' ', texto).strip() # Normaliza espaços e quebras
