@@ -1,5 +1,5 @@
 python
 streamlit (pip install streamlit)
-docx (pip install docx)
-PyPDF2 (pip install pypdf)
+docx (pip install python-docx)
+PyPDF2 (pip install pypdf2)
 langdetect (pip install langdetect)
