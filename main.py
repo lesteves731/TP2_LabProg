@@ -26,10 +26,18 @@ def extrair_texto(ficheiro):
 # TAREFA 2: Pipeline de Limpeza (Adriano Sousa)
 # Objetivo: Criar pipeline configurável
 # =========================================================
+<<<<<<< HEAD
 # a) Remoção de artefactos
 def remover_artefactos(texto):
     # remove emojis e símbolos estranhos mantendo português
     texto = re.sub(r'[^\w\sÀ-ÿ.,;:!?()\-\']', ' ', texto)
+=======
+def pipeline_limpeza(texto_bruto, opcoes):
+    if config.get('remover_artefactos'):
+        texto = re.sub(r'[^\x00-\x7F]+', ' ', texto) # Remove caracteres não-ASCII
+    if config.get('normalizar_espacos'):
+        texto = re.sub(r'\s+', ' ', texto).strip() # Normaliza espaços e quebras
+>>>>>>> 1591491ff2f9b172fb55f8e5499d37452306fed2
     return texto
 
 # c) Correção de quebras de linha incorretas
