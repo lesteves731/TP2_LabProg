@@ -133,7 +133,7 @@ def pipeline_limpeza(texto_bruto, opcoes):
     return texto
 
 # =========================================================
-# TAREFA 4: API SLM 8B
+# TAREFA 4: API SLM
 # =========================================================
 URL = "https://reality.utad.net/slm"
 MODELO = "llama-3.2-1b-instruct"
